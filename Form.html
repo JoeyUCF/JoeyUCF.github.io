@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Pizza Ordering Form</title>
+</head>
+
+<body>
+  <main>
+    <header>
+      <h1>Pizza Ordering Form</h1>
+    </header>
+
+    <form action="#" method="post">
+      <section>
+        <h2 id="contact">Contact Information</h2>
+
+        <fieldset>
+
+          <div class="contact-grid">
+            <label for="name">Name:</label>
+            <input id="name" name="name" type="text" required >
+
+            <label for="phone">Phone:</label>
+            <input id="phone" name="phone" type="tel" required >
+
+            <label for="email">Email:</label>
+            <input id="email" name="email" type="email" required >
+          </div>
+        </fieldset>
+      </section>
+
+      <section>
+        <h2 id="size">Select Pizza Size</h2>
+
+        <div class="size-row">
+          <label for="pizzaSize">Pizza Size:</label>
+          <select id="pizzaSize" name="pizzaSize" required>
+            <option value="" selected>--Select Size--</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+            <option value="XLarge">XLarge</option>
+          </select>
+        </div>
+      </section>
+
+      <section>
+        <h2 id="sauce">Select Sauce</h2>
+
+        <fieldset>
+          <ul class="options">
+            <li>
+              <label><input type="radio" name="sauceType" value="Marinara" required > Marinara</label>
+            </li>
+            <li>
+              <label><input type="radio" name="sauceType" value="Ranch" required > Ranch</label>
+            </li>
+            <li>
+              <label><input type="radio" name="sauceType" value="No Sauce" required > No Sauce</label>
+            </li>
+          </ul>
+        </fieldset>
+      </section>
+
+      <section>
+        <h2 id="toppings">Select Toppings</h2>
+
+        <fieldset>
+
+          <div class="toppings">
+            <label><input type="checkbox" name="toppings" value="Pepperoni" > Pepperoni</label>
+            <label><input type="checkbox" name="toppings" value="Sausage" > Sausage</label>
+
+            <label><input type="checkbox" name="toppings" value="Mushroom" > Mushroom</label>
+            <label><input type="checkbox" name="toppings" value="Pineapple" > Pineapple</label>
+
+            <label><input type="checkbox" name="toppings" value="Peppers" > Peppers</label>
+            <label><input type="checkbox" name="toppings" value="Onions" > Onions</label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section>
+        <h2 id="instructions">Additional Instructions</h2>
+        <textarea id="notes" name="notes" placeholder="Add instructions"></textarea>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </section>
+    </form>
+
+    <section>
+      <h3 id="games">List of My Favorite Games</h3>
+
+      <table border="1">
+        <thead>
+          <tr>
+            <th scope="col">Developer</th>
+            <th scope="col">Title</th>
+            <th scope="col">Year</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td rowspan="3">Bungie</td>
+            <td>Halo</td>
+            <td>2001</td>
+          </tr>
+          <tr>
+            <td>Halo 2</td>
+            <td>2004</td>
+          </tr>
+          <tr>
+            <td>Halo 3</td>
+            <td>2007</td>
+          </tr>
+
+          <tr>
+            <td>Mojang</td>
+            <td>Minecraft</td>
+            <td>2011</td>
+          </tr>
+        </tbody>
+		
+        <tfoot>
+          <tr>
+            <td colspan="3">Count: 4</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

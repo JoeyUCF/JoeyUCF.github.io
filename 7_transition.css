@@ -10,28 +10,23 @@ body {
 }
 
 #menuItems {
-  width: 190px;
-  background: #000;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+    width: 190px;
+    background: black;
+    display: flex;
+    flex-direction: column;
 }
 
 #menuItems button {
-  width: 100%;
-  background: #1a1aff;
-  color: #fff;
-  border: 1px solid #000;
-  padding: 10px 0;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s ease;
+    background: #1a1aff;
+    color: white;
+    border: 1px solid black;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
 #menuItems button:hover {
-  background: #0000cc;
+    background: #0000cc;
 }
 
 main {
@@ -60,24 +55,22 @@ h1 {
 }
 
 #container {
-  width: 92%;
-  margin: 0 auto 30px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 26px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
 
 #container article {
-  color: #b5b5b5;               
-  max-height: 260px;           
-  overflow: hidden;
-  transition: color 2s ease, max-height 2s ease; 
+    color: #bdbdbd;
+    max-height: 240px;
+    overflow: hidden;
+    transition: color 2s, max-height 2s;
 }
 
 
 #container article:hover {
-  color: #6b6b6b;
-  max-height: 9999px;
+    color: #333;
+    max-height: 1000px;
 }
 
 
@@ -89,12 +82,10 @@ h1 {
 }
 
 #container article > p:first-of-type::first-letter {
-  font-family: "Times New Roman", Times, serif;
-  font-size: 36px;        
-  line-height: 1;
-  font-weight: 700;
-  float: left;
-  margin-right: 8px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 36px;
+    float: left;
+    margin-right: 6px;
 }
 
 #container article a {
@@ -104,15 +95,13 @@ h1 {
 }
 
 a[href*="google.com"]::after {
-  content: "";
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-left: 8px;
-  vertical-align: -3px;
-  background-image: url("arrowarrow.png");
-  background-size: contain;
-  background-repeat: no-repeat;
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 6px;
+    background: url("arrowarrow.png") no-repeat center;
+    background-size: contain;
 }
 
 #jumpMenu {
@@ -128,16 +117,28 @@ a[href*="google.com"]::after {
   display: block;
 }
 
+#jumpMenu {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #cfa434;
+}
+
+#recentArticles:hover + #jumpMenu,
+#jumpMenu:hover {
+    display: block;
+}
+
 #jumpMenu a {
-  display: block;
-  padding: 10px 12px;
-  text-decoration: none;
-  color: #d6d6d6;
-  background: #111;
-  transition: background-color 0.2s ease, color 0.2s ease;
+    display: block;
+    padding: 6px 10px;
+    color: blue;
+    text-decoration: none;
 }
 
 #jumpMenu a:hover {
-  color: #fff;
-  background: #333;
+    background: #1a1aff;
+    color: white;
 }
+

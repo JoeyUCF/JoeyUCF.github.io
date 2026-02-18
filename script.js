@@ -1,6 +1,3 @@
-// Basic JavaScript Exercises
-// (Keep functions in the global scope because the HTML uses inline onclick="..." handlers.)
-
 function getCounterValue() {
   const counterEl = document.getElementById('counter');
   const n = parseInt(counterEl?.textContent ?? '0', 10);
@@ -13,17 +10,16 @@ function setCounterValue(value) {
   counterEl.textContent = String(value);
 }
 
-// 1pt: Simple Functions
+//Simple Functions
 function tickUp() {
   setCounterValue(getCounterValue() + 1);
 }
 
 function tickDown() {
-  // If you want to allow negatives, remove Math.max(...)
   setCounterValue(Math.max(0, getCounterValue() - 1));
 }
 
-// 1pt: Simple For Loop
+//Simple For Loop
 function runForLoop() {
   const n = getCounterValue();
   const out = [];
@@ -33,7 +29,7 @@ function runForLoop() {
   if (resultEl) resultEl.textContent = out.join(' ');
 }
 
-// 1pt: Repetition with Condition
+//Repetition with Condition
 function showOddNumbers() {
   const n = getCounterValue();
   const out = [];
@@ -43,7 +39,7 @@ function showOddNumbers() {
   if (resultEl) resultEl.textContent = out.join(' ');
 }
 
-// 1pt: Arrays
+//Arrays
 function addMultiplesToArray() {
   const n = getCounterValue();
   const arr = [];
@@ -53,11 +49,11 @@ function addMultiplesToArray() {
     arr.push(i);
   }
 
-  // NOTE: print the array itself, not each element individually
+
   console.log(arr);
 }
 
-// 2pts: Objects and Form Fields
+//Objects and Form Fields
 function printCarObject() {
   const carType = document.getElementById('carType')?.value ?? '';
   const carMPG = document.getElementById('carMPG')?.value ?? '';
@@ -72,7 +68,7 @@ function printCarObject() {
   console.log(carObj);
 }
 
-// 2pts: Objects and Form Fields pt. 2
+//Objects and Form Fields pt. 2
 function loadCar(which) {
   // These objects are defined in the footer of the provided HTML.
   const carMap = {
@@ -93,7 +89,7 @@ function loadCar(which) {
   if (colorEl) colorEl.value = car.cColor ?? '';
 }
 
-// 2pt: Changing Styles
+//Changing Styles
 function changeColor(which) {
   const p = document.getElementById('styleParagraph');
   if (!p) return;

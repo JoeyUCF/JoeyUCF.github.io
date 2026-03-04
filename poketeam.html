@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pokemon Team Builder</title>
+  <style>
+    /* No CSS requirement — just light layout for readability */
+    body { font-family: system-ui, Arial, sans-serif; padding: 16px; }
+    .card { border: 1px solid #ccc; border-radius: 10px; padding: 16px; max-width: 760px; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .row > * { flex: 1; }
+    img { image-rendering: pixelated; }
+    .preview { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 240px; }
+    .moves { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .moves label { display: grid; gap: 6px; }
+    button { padding: 8px 12px; cursor: pointer; }
+    .team { margin-top: 16px; border-top: 1px solid #ddd; padding-top: 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    td, th { border: 1px solid #ddd; padding: 10px; vertical-align: top; }
+    .muted { color: #666; font-size: 0.9em; }
+    .error { color: #b00020; }
+    .ok { color: #0a7a0a; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Pokemon Team Builder</h2>
+
+    <div class="row">
+      <div>
+        <label for="query"><b>Name or ID</b></label><br />
+        <input id="query" type="text" placeholder="e.g. 143 or snorlax" style="width: 100%; padding: 8px;" />
+        <div class="muted">Tip: use numbers 1–151 if you don’t know names.</div>
+      </div>
+      <div style="flex: 0;">
+        <button id="findBtn">Find</button>
+      </div>
+    </div>
+
+    <div id="status" class="muted" style="margin-top: 10px;"></div>
+
+    <div class="row" style="margin-top: 14px;">
+      <div class="preview">
+        <img id="pokeImg" alt="Pokemon image" width="180" height="180" />
+        <div><b id="pokeName">—</b> <span class="muted" id="pokeId"></span></div>
+
+        <!-- Audio requirement: load + playable -->
+        <audio id="pokeAudio" controls preload="none" style="width: 260px;"></audio>
+        <div class="muted" id="audioNote"></div>
+      </div>
+
+      <div style="min-width: 320px;">
+        <div class="moves">
+          <label>
+            Move 1
+            <select id="m1"></select>
+          </label>
+          <label>
+            Move 2
+            <select id="m2"></select>
+          </label>
+          <label>
+            Move 3
+            <select id="m3"></select>
+          </label>
+          <label>
+            Move 4
+            <select id="m4"></select>
+          </label>
+        </div>
+
+        <div style="margin-top: 12px;">
+          <button id="addBtn">Add to Team</button>
+          <span class="muted"> (max 6)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="team">
+      <h3>Team</h3>
+      <div class="muted">Your saved Pokémon + selected moves.</div>
+      <div id="teamWrap" style="margin-top: 10px;"></div>
+    </div>
+  </div>
+
+  <script>
+    // -----------------------------
+    // Simple caching (localStorage)
+    // -----------------------------
+    const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+    const cacheKey = (nameOrId) => `pokeapi:pokemon:${String(nameOrId).toLowerCase()}`;
+
+    function loadCache(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const obj = JSON.parse(raw);
+        if (!obj || !obj.savedAt || !obj.data) return null;
+        if (Date.now() - obj.savedAt > CACHE_TTL_MS) return null; // expired
+        return obj.data;
+      } catch {
+        return null;
+      }
+    }
+
+    function saveCache(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify({ savedAt: Date.now(), data }));
+      } catch {
+        // ignore storage errors (quota/private browsing)
+      }
+    }
+
+    async function fetchPokemon(nameOrId) {
+      const key = cacheKey(nameOrId);
+      const cached = loadCache(key);
+      if (cached) return { data: cached, fromCache: true };
+
+      const url = `https://pokeapi.co/api/v2/pokemon/${encodeURIComponent(String(nameOrId).toLowerCase())}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Not found (HTTP ${res.status})`);
+      const data = await res.json();
+      saveCache(key, data);
+      return { data, fromCache: false };
+    }
+
+    // -----------------------------
+    // DOM helpers
+    // -----------------------------
+    const $ = (id) => document.getElementById(id);
+    const statusEl = $("status");
+
+    function setStatus(msg, kind = "muted") {
+      statusEl.className = kind;
+      statusEl.textContent = msg;
+    }
+
+    function clearSelect(sel) {
+      while (sel.firstChild) sel.removeChild(sel.firstChild);
+    }
+
+    function addOption(sel, label, value = label) {
+      const opt = document.createElement("option");
+      opt.value = value;
+      opt.textContent = label;
+      sel.appendChild(opt);
+    }
+
+    // -----------------------------
+    // App state
+    // -----------------------------
+    let currentPokemon = null; // { id, name, imageUrl, cryUrl, moves[] }
+    const team = []; // entries: { id, name, sprite, moves: [..] }
+
+    // -----------------------------
+    // Render functions
+    // -----------------------------
+    function renderPokemon(poke) {
+      $("pokeName").textContent = poke.name;
+      $("pokeId").textContent = `#${poke.id}`;
+
+      $("pokeImg").src = poke.imageUrl || "";
+      $("pokeImg").alt = poke.name;
+
+      // Audio (cry). Some browsers block autoplay; controls are provided.
+      const audio = $("pokeAudio");
+      const note = $("audioNote");
+      if (poke.cryUrl) {
+        audio.src = poke.cryUrl;
+        note.textContent = "If audio doesn’t play, press ▶ or check your browser sound settings.";
+      } else {
+        audio.removeAttribute("src");
+        audio.load();
+        note.textContent = "No cry audio available for this Pokémon from the API response.";
+      }
+
+      // Fill 4 dropdowns with moves
+      const moveNames = poke.moves.slice().sort((a, b) => a.localeCompare(b));
+      const selects = [$("m1"), $("m2"), $("m3"), $("m4")];
+      for (const sel of selects) {
+        clearSelect(sel);
+        if (moveNames.length === 0) {
+          addOption(sel, "(no moves found)", "");
+          sel.disabled = true;
+        } else {
+          sel.disabled = false;
+          // Put a default prompt first
+          addOption(sel, "(choose a move)", "");
+          for (const m of moveNames) addOption(sel, m, m);
+        }
+      }
+    }
+
+    function renderTeam() {
+      const wrap = $("teamWrap");
+      wrap.innerHTML = "";
+
+      if (team.length === 0) {
+        wrap.innerHTML = `<div class="muted">No Pokémon added yet.</div>`;
+        return;
+      }
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      thead.innerHTML = `<tr><th>Pokémon</th><th>Moves</th></tr>`;
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      for (const entry of team) {
+        const tr = document.createElement("tr");
+
+        const tdP = document.createElement("td");
+        const img = document.createElement("img");
+        img.src = entry.sprite || "";
+        img.alt = entry.name;
+        img.width = 72; img.height = 72;
+
+        const title = document.createElement("div");
+        title.innerHTML = `<b>${entry.name}</b> <span class="muted">#${entry.id}</span>`;
+
+        tdP.appendChild(img);
+        tdP.appendChild(title);
+
+        const tdM = document.createElement("td");
+        const ul = document.createElement("ul");
+        for (const m of entry.moves) {
+          const li = document.createElement("li");
+          li.textContent = m || "(none)";
+          ul.appendChild(li);
+        }
+        tdM.appendChild(ul);
+
+        tr.appendChild(tdP);
+        tr.appendChild(tdM);
+        tbody.appendChild(tr);
+      }
+
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+    }
+
+    // -----------------------------
+    // Event handlers
+    // -----------------------------
+    async function onFind() {
+      const q = $("query").value.trim();
+      if (!q) {
+        setStatus("Enter a Pokémon name or ID.", "error");
+        return;
+      }
+
+      setStatus("Loading…");
+      try {
+        const { data, fromCache } = await fetchPokemon(q);
+
+        // Pick an image (fallbacks included)
+        const imageUrl =
+          data?.sprites?.other?.["official-artwork"]?.front_default ||
+          data?.sprites?.front_default ||
+          data?.sprites?.other?.home?.front_default ||
+          "";
+
+        // Pick cry URL (PokeAPI now provides cries.latest/legacy for many Pokémon)
+        const cryUrl = data?.cries?.latest || data?.cries?.legacy || "";
+
+        const moves = (data?.moves || [])
+          .map(x => x?.move?.name)
+          .filter(Boolean);
+
+        currentPokemon = {
+          id: data.id,
+          name: data.name,
+          imageUrl,
+          cryUrl,
+          // small sprite for team display
+          sprite: data?.sprites?.front_default || imageUrl,
+          moves
+        };
+
+        renderPokemon(currentPokemon);
+        setStatus(fromCache ? "Loaded (from cache)." : "Loaded (from API).", "ok");
+      } catch (err) {
+        currentPokemon = null;
+        $("pokeName").textContent = "—";
+        $("pokeId").textContent = "";
+        $("pokeImg").src = "";
+        $("pokeAudio").removeAttribute("src");
+        $("pokeAudio").load();
+        ["m1","m2","m3","m4"].forEach(id => { clearSelect($(id)); addOption($(id), "(no data)", ""); $(id).disabled = true; });
+        setStatus(`Could not load Pokémon: ${err.message}`, "error");
+      }
+    }
+
+    function onAddToTeam() {
+      if (!currentPokemon) {
+        setStatus("Find a Pokémon first.", "error");
+        return;
+      }
+      if (team.length >= 6) {
+        setStatus("Team is full (max 6).", "error");
+        return;
+      }
+
+      const picks = [$("m1").value, $("m2").value, $("m3").value, $("m4").value];
+      // If user leaves some blank, keep them as blank (still shows selection state)
+      team.push({
+        id: currentPokemon.id,
+        name: currentPokemon.name,
+        sprite: currentPokemon.sprite,
+        moves: picks
+      });
+
+      renderTeam();
+      setStatus(`${currentPokemon.name} added to team.`, "ok");
+    }
+
+    // Wire up
+    $("findBtn").addEventListener("click", onFind);
+    $("addBtn").addEventListener("click", onAddToTeam);
+    $("query").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") onFind();
+    });
+
+    // Initial UI state
+    renderTeam();
+    ["m1","m2","m3","m4"].forEach(id => { addOption($(id), "(no data)", ""); $(id).disabled = true; });
+    setStatus("Enter a Pokémon name or ID, then click Find.");
+  </script>
+</body>
+</html>

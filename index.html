@@ -1,170 +1,78 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Joseph Roberson - Resume</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joseph Roberson | Software Engineering Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <header>
-    <h1>Joseph Roberson</h1>
-
-    <address>
-      <p>
-        <a href="mailto:YOUR_UCF_EMAIL@ucf.edu">jo970062@ucf.edu</a>
-      </p>
-      <p>
-        <a href="https://www.linkedin.com/in/joseph-roberson1/" target="_blank" rel="noopener noreferrer">
-          LinkedIn Profile
-        </a>
-      </p>
-    </address>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="index.html">Joseph Roberson</a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">Menu</button>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="portfolio.html">Projects</a></li>
+          <li><a href="skills.html">Skills</a></li>
+          <li><a href="resume-portfolio.html">Resume</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section>
-      <h2 id="objective">Professional Objective</h2>
-      <p>
-        As an aspiring software engineer, I am seeking to apply my foundational skills in computer science and
-        problem-solving to make a positive impact in the industry. My goal is to join a dynamic and forward-thinking
-        team where I can continuously learn and grow as a professional while contributing to the development of
-        innovative, high-quality software solutions.
-      </p>
-    </section>
-
-    <section>
-      <h2 id="education">Education</h2>
-
-      <article>
-        <header>
-          <h3>University of Central Florida</h3>
-          <p>B.S. in Computer Science</p>
-          <p>December 2022 - Present</p>
-        </header>
-
-        <ul>
-          <li>Cumulative GPA: 3.8</li>
-        </ul>
-      </article>
-
-      <article>
-        <header>
-          <h3>Valencia College</h3>
-          <p>A.A. in Computer Science</p>
-          <p>December 2021 - December 2022</p>
-        </header>
-
-        <ul>
-          <li>Cumulative GPA: 3.8</li>
-        </ul>
-      </article>
-    </section>
-
-    <section>
-      <h2 id="experience">Relevant Work Experience</h2>
-
-      <article>
-        <header>
-          <h3>Administrative Clerical Assistant, Primrose Center, Inc.</h3>
-          <p>Orlando, FL</p>
-          <p>November 2021 - Present</p>
-        </header>
-
-        <ul>
-          <li>Answer and direct calls, take messages, and place calls on behalf of the organization.</li>
-          <li>Sort and distribute daily mail, send bills, and coordinate package pickups.</li>
-          <li>Schedule appointments and meetings, distribute reports, and manage correspondence with external parties.</li>
-          <li>Support onboarding by assisting new hires, office temps, and part-time students.</li>
-        </ul>
-      </article>
-
-      <article>
-        <header>
-          <h3>Front of House Staff, Avalon Eatery</h3>
-          <p>Orlando, FL</p>
-          <p>July 2021 - November 2021</p>
-        </header>
-
-        <ul>
-          <li>Coordinated with the kitchen team and teammates to support efficient operations and customer satisfaction.</li>
-          <li>Assisted with catering orders including food preparation, delivery, and setup.</li>
-          <li>Prepared and packaged orders for mobile delivery services.</li>
-          <li>Developed strong menu knowledge to support upselling and improve the guest experience.</li>
-        </ul>
-      </article>
-
-      <article>
-        <header>
-          <h3>Front Service Clerk, Publix</h3>
-          <p>Orlando, FL</p>
-          <p>January 2019 - July 2021</p>
-        </header>
-
-        <ul>
-          <li>Provided customer service by greeting customers and answering questions.</li>
-          <li>Assisted customers with product information and helped locate items throughout the store.</li>
-          <li>Completed cleaning duties to meet COVID-19 CDC standards.</li>
-          <li>Supported multiple departments as needed to help the store meet service goals.</li>
-        </ul>
-      </article>
-    </section>
-
-    <section>
-      <h2 id="projects">Projects</h2>
-
-      <article>
-        <header>
-          <h3><a href="project1.html">SecureAttend Suite (Attendance Tracking Web App)</a></h3>
-        </header>
-        <p>
-          Designed a web application concept for day program attendance tracking, focusing on reliable recordkeeping
-          and role-based access for staff.
+  <main class="container">
+    <section class="hero">
+      <article class="card">
+        <p class="badge">Aspiring IT Professional</p>
+        <h1>Building reliable software and practical systems that support people and operations.</h1>
+        <p class="lead">
+          I am an Information Technology student at the University of Central Florida focused on building high-quality,
+          user-centered software. My background includes day-to-day operations support, automation, and systems work.
         </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="portfolio.html">View Projects</a>
+          <a class="btn" href="resume-portfolio.html">Read Resume</a>
+        </div>
       </article>
 
-      <article>
-        <header>
-          <h3><a href="project2.html">Home Server and Media Platform (Proxmox, Docker, Jellyfin)</a></h3>
-        </header>
-        <p>
-          Built and maintained a home server environment using virtualization and containers to host services and manage
-          media storage and streaming.
-        </p>
-      </article>
+      <aside class="card">
+        <h2>At a glance</h2>
+        <ul>
+          <li><strong>Education:</strong> B.S. Information Technology, University of Central Florida</li>
+          <li><strong>Current Role:</strong> Business Analyst, UES Professional Solutions</li>
+          <li><strong>Key Technologies:</strong> Python, C, SQL, VantagePoint ERP</li>
+          <li><strong>Focus Areas:</strong> End-user support, platform optimization, process automation</li>
+        </ul>
+      </aside>
     </section>
 
     <section>
-      <h2 id="skills">Skills</h2>
+      <h2>Featured project previews</h2>
+      <div class="grid grid-2">
+        <article class="card">
+          <img class="project-image" src="images/secureattend.png" alt="Preview graphic for SecureAttend Suite project">
+          <h3>SecureAttend Suite</h3>
+          <p>Attendance tracking web app concept with role-based access and reliable recordkeeping.</p>
+          <a href="project-secureattend.html">Open project details</a>
+        </article>
 
-      <section>
-        <h3 id="technical-skills">Technical Skills</h3>
-        <ul>
-          <li>Python</li>
-          <li>C</li>
-          <li>SQL</li>
-          <li>Microsoft Suite</li>
-        </ul>
-      </section>
-
-      <section>
-        <h3 id="professional-skills">Professional Skills</h3>
-        <ul>
-          <li>Phone etiquette</li>
-          <li>Clerical experience</li>
-          <li>Data entry</li>
-        </ul>
-      </section>
-    </section>
-
-    <section>
-      <h2 id="activities">Activities</h2>
-      <ul>
-        <li>Write Python scripts to automate day-to-day processes.</li>
-      </ul>
+        <article class="card">
+          <img class="project-image" src="images/homeserver.png" alt="Preview graphic for Home Server and Media Platform project">
+          <h3>Home Server and Media Platform</h3>
+          <p>Proxmox and Docker based system for hosting services and managing media streaming.</p>
+          <a href="project-homeserver.html">Open project details</a>
+        </article>
+      </div>
     </section>
   </main>
 
   <footer>
     <p>&copy; Joseph Roberson</p>
   </footer>
+  <script src="main.js"></script>
 </body>
 </html>
